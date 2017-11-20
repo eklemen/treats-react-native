@@ -3,6 +3,7 @@ import {
     StyleSheet,
     View,
     Dimensions,
+    AsyncStorage,
 } from 'react-native';
 import {
     FormLabel,
@@ -17,28 +18,31 @@ export default class Login extends React.Component {
         super(props);
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            error: null
         };
+        this.login = this.login.bind(this);
     }
     async login() {
         const { email, password } = this.state;
         const { navigation } = this.props;
-        let res;
         try {
-            res = await fetch('http://localhost:3000/v1/users');
-            console.log('res1------- ', res);
-        } catch (e) {
-            res = console.log('error fetching: e: ', e)
+            const res = await Api.signIn(email, password);
+            const { data: { token } } = res;
+            await AsyncStorage.setItem('treatsToken', token);
+            navigation.navigate('Map');
+        } catch (error) {
+            this.setState({error});
         }
-        const response = await fetch('http://localhost:3000/v1/users');
-        console.log('res2-------- ', res);
-        return res;
     }
 
     render() {
+        const { error } = this.state;
+        const errComp = (<Text>Oops, something went wrong...</Text>);
         return (
             <View style={styles.container}>
                 <Text h1>Login</Text>
+                { error && errComp}
                 <FormLabel>Email</FormLabel>
                 <FormInput
                     inputStyle={ styles.input }
@@ -58,8 +62,11 @@ export default class Login extends React.Component {
                     large
                     rightIcon={{name: 'login', type: 'entypo'}}
                     style={styles.submit}
+                    type="submit"
                     onPress={ () => this.login().done() }
                     title="Login" />
+                <Text>New member?</Text>
+
             </View>
         );
     }

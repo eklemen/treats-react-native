@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 import HouseMarker from './components/HouseMarker';
-import ButtonBar from './components/ButtonBar';
+import ButtonBar from './../shared/ButtonBar';
 import mockPoints from './fixtures/mockPoints'
 import Api from './../services/ApiService';
 const screen = Dimensions.get('window');
@@ -128,7 +128,7 @@ export default class Map extends React.Component {
                         ))
                     }
                 </MapView>
-                <ButtonBar addMarker={this.addMarker} />
+                <ButtonBar onPress={this.addMarker} />
             </View>
         );
     }

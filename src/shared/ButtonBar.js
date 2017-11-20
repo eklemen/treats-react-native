@@ -8,11 +8,11 @@ import {
 
 export default class ButtonBar extends React.Component {
     render() {
-        const {addMarker} = this.props;
+        const { onPress } = this.props;
         return (
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                    onPress={addMarker}
+                    onPress={ onPress }
                     style={[styles.bubble, styles.button]}
                 >
                     <Text>Treat!</Text>
