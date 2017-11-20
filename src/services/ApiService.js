@@ -7,14 +7,16 @@ axios.defaults.baseURL = DEV_URL;
 axios.defaults.headers.common['Authorization'] = '';
 const Api = {};
 
-Api.signIn = (email, password) => {
-    axios.post('/signin', { email, password })
-        .then( response => {
-            console.log('response.data', response.data);
-            console.log('response.data.token', response.data.token);
-        }, err => {
-            console.log('err', err);
-        })
+Api.signIn = (email, password, navigation) => {
+
+    // axios.post('/signin', { email, password })
+    //     .then( response => {
+    //         console.log('response.data', response.data);
+    //         console.log('response.data.token', response.data.token);
+    //         navigation.navigate('Map');
+    //     }, err => {
+    //         console.log('err', err);
+    //     })
 };
 
 Api.signUp = (email, password) => {
