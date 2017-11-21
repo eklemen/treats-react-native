@@ -8,7 +8,7 @@ import {
 
 export default class ButtonBar extends React.Component {
     render() {
-        const { onPress } = this.props;
+        const { onPress, logout } = this.props;
         return (
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
@@ -16,6 +16,12 @@ export default class ButtonBar extends React.Component {
                     style={[styles.bubble, styles.button]}
                 >
                     <Text>Treat!</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={ logout }
+                    style={[styles.bubble, styles.button]}
+                >
+                    <Text>Logout</Text>
                 </TouchableOpacity>
             </View>
         );

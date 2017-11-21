@@ -12,23 +12,17 @@ Api.signIn = (email, password) => {
 };
 
 Api.signUp = (email, password) => {
-    axios.post('/signin', { email, password })
-        .then( async (response) => {
-            console.log('response.data', response.data);
-            try {
-                await AsyncStorage.setItem('@MySuperStore:key', 'I like to save it.');
-            } catch (error) {
-                // Error saving data
-            }
-        }, err => {
-            console.log('err', err);
-        })
+    return axios.post('/signup', { email, password })
+};
+
+Api.logout = () => {
+    return axios.get('/logout')
 };
 
 Api.getUsers = () => {
     axios.get('/users')
         .then( response => {
-            console.log('response.data', response.data);
+            // console.log('response.data', response.data);
         }, err => {
             console.log('err1', err);
         })
@@ -37,7 +31,7 @@ Api.getUsers = () => {
 Api.getHouses = () => {
     axios.get('/houses')
         .then( response => {
-            console.log('response.data', response.data);
+            // console.log('response.data', response.data);
         }, err => {
             console.log('err1', err);
         })

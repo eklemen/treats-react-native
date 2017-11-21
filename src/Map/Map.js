@@ -4,7 +4,8 @@ import {
     View,
     Text,
     Dimensions,
-    Platform
+    Platform,
+    AsyncStorage
 } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 import HouseMarker from './components/HouseMarker';
@@ -91,6 +92,17 @@ export default class Map extends React.Component {
         this.setState({ houses: [...updatedArray] });
     };
 
+    logout = async () => {
+        const { navigation } = this.props;
+        try {
+            await Api.logout();
+            await AsyncStorage.setItem('treatsToken', '');
+            navigation.navigate('Login');
+        } catch (err) {
+            console.log('logout err: ', err);
+        }
+    };
+
     render() {
         let text = 'Waiting...';
         if (this.state.errorMessage) {
@@ -128,7 +140,8 @@ export default class Map extends React.Component {
                         ))
                     }
                 </MapView>
-                <ButtonBar onPress={this.addMarker} />
+                <ButtonBar onPress={this.addMarker}
+                           logout={ () => this.logout().done() } />
             </View>
         );
     }

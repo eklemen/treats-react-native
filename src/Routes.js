@@ -2,9 +2,10 @@ import React from 'react';
 import {
     StackNavigator
 } from 'react-navigation';
-import Login from './Login/Login';
-import Map from './Map/Map';
-import SplashScreen from './SplashScreen/SplashScreen';
+import { Login } from './Login';
+import { Map } from './Map';
+import { Register } from './Register';
+import { SplashScreen } from './SplashScreen';
 
 const Routes = StackNavigator({
     Splash: {
@@ -19,6 +20,12 @@ const Routes = StackNavigator({
         navigationOptions: {
             title: 'Login',
             headerLeft: null,
+        },
+    },
+    Register: {
+        screen: Register,
+        navigationOptions: {
+            title: 'Register',
         },
     },
     Map: {

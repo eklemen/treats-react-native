@@ -12,16 +12,23 @@ export default class SplashScreen extends React.Component {
     }
 
     componentWillMount() {
+        this._checkToken().done();
+    }
+
+    _checkToken = async () => {
         const { navigation } = this.props;
-        AsyncStorage.getItem('treatsToken').then(token => {
+        try {
+            const token = await AsyncStorage.getItem('treatsToken');
             console.log('token', token);
             if(token) {
                 navigation.navigate('Map');
             } else {
                 navigation.navigate('Login');
             }
-        })
-    }
+        } catch (err) {
+            console.log('_checkToken err: ', err);
+        }
+    };
 
     render() {
         return (
