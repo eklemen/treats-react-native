@@ -8,6 +8,7 @@ import {
     AsyncStorage
 } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
+import axios from 'axios';
 import HouseMarker from './components/HouseMarker';
 import ButtonBar from './../shared/ButtonBar';
 import mockPoints from './fixtures/mockPoints'
@@ -23,11 +24,10 @@ export default class Map extends React.Component {
         this.state = {
             location: null,
             errorMessage: null,
-            houses: [...mockPoints]
+            houses: []
         };
     }
     componentWillMount() {
-        Api.getUsers();
         if (Platform.OS === 'android' && !Constants.isDevice) {
             this.setState({
                 errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
@@ -35,7 +35,16 @@ export default class Map extends React.Component {
         } else {
             this._getLocationAsync();
         }
+        this._getHouses().done();
     }
+    _getHouses = async () => {
+        try {
+            const houses = await Api.getHouses();
+            this.setState({ houses });
+        } catch (err) {
+            console.log('GET HOUSES ERR: ', err);
+        }
+    };
 
     _getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -57,46 +66,47 @@ export default class Map extends React.Component {
         const coded = Location.reverseGeocodeAsync(latlng);
         this.setState({ coded });
     };
-    addMarker = () => {
+    addMarker = async () => {
         const {
-            location: {coords, timestamp},
-            houses
+            location: { coords }
         } = this.state;
-        const latlng = {
-            latitude: coords.latitude,
-            longitude: coords.longitude
-        };
-        const geoCode = this._getGeocode(latlng);
         const house = {
-            coords: latlng,
-            geoCode,
-            timestamp: timestamp,
-            votes: {
-                up: 1,
-                down: 0
-            }
+            lat: coords.latitude,
+            long: coords.longitude
         };
-        this.setState({ houses: [...houses, house] });
+        try {
+            await Api.addHouse(house);
+            await this._getHouses();
+        } catch (err) {
+            console.log('addMarker err: ', err);
+        }
     };
 
-    handleVote = (id, isUpvote) => {
-        // TODO: check if user has already voted
-        const {houses} = this.state;
-        const updatedArray = [...houses];
-        const item = updatedArray.find(house => (
-            house.timestamp === id
-        ));
-        isUpvote
-            ? item.votes.up += 1
-            : item.votes.down += 1;
-        this.setState({ houses: [...updatedArray] });
+    _handleVote = async (house, voteCreator, vote) => {
+        const { houses } = this.state;
+        // const house = houses.find(h => h.creator === voteCreator);
+        // const voteFound = house.votes.find(vote => vote.creator === id);
+        // console.log('voteFound=++=++=++=++=++', voteFound);
+        // if(voteFound && voteFound.vote === vote) {
+        //     const v = vote === 1 ? 'up' : 'down';
+        //     this.setState({
+        //         errorMessage: `You have already ${v}voted this house`
+        //     });
+        // } else {
+        //     try {
+        //         await Api.putVote(id, {vote});
+        //         await this._getHouses();
+        //     } catch (err) {
+        //         console.log('handleVote err: ', err);
+        //     }
+        // }
     };
 
     logout = async () => {
         const { navigation } = this.props;
         try {
             await Api.logout();
-            await AsyncStorage.setItem('treatsToken', '');
+            await AsyncStorage.removeItem('treatsToken');
             navigation.navigate('Login');
         } catch (err) {
             console.log('logout err: ', err);
@@ -116,6 +126,7 @@ export default class Map extends React.Component {
             )
         }
         const { location: {coords}, houses } = this.state;
+        // console.log('one house ++++++++++++++++++', houses[0]);
         const { latitude, longitude } = coords;
         return (
             <View style={styles.container}>
@@ -131,11 +142,11 @@ export default class Map extends React.Component {
                     showsUserLocation={true}
                 >
                     {
-                        houses.map((house, i) => (
+                        houses && houses.map((house, i) => (
                             <HouseMarker
                                 house={house}
                                 key={i}
-                                handleVote={this.handleVote}
+                                handleVote={this._handleVote}
                             />
                         ))
                     }

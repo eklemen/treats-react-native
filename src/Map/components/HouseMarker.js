@@ -11,14 +11,15 @@ import VoteButtons from './VoteButtons';
 
 export default class HouseMarker extends React.Component {
     render() {
-        const { house, handleVote, address } = this.props;
+        const { house, handleVote } = this.props;
         const {
-            coords: {latitude, longitude},
+            position: {lat, long},
             votes,
-            timestamp
+            timestamp,
+            creator,
         } = house;
 
-        const netLikes = votes.up - votes.down;
+        const netLikes = votes.reduce((a, b) => a + b.vote, 0);
         const likesStyles = [styles.netLikes];
         if(netLikes < 0) likesStyles.push(styles.negativeLikes);
         if(netLikes === 0) likesStyles.push(styles.neutralLikes);
@@ -26,8 +27,8 @@ export default class HouseMarker extends React.Component {
         return (
             <MapView.Marker
                 coordinate={{
-                    latitude,
-                    longitude
+                    latitude: lat,
+                    longitude: long
                 }}
             >
                 <MapView.Callout style={styles.container}>
@@ -38,6 +39,7 @@ export default class HouseMarker extends React.Component {
                         <VoteButtons
                             handleVote={handleVote}
                             timestamp={timestamp}
+                            houseCreator={ creator }
                         />
                     </View>
                 </MapView.Callout>

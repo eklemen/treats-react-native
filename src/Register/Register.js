@@ -12,6 +12,7 @@ import {
     FormLabel,
     FormInput,
 } from 'react-native-elements';
+import axios from 'axios';
 import Api from './../services/ApiService';
 
 export default class Register extends React.Component {
@@ -31,19 +32,18 @@ export default class Register extends React.Component {
             return this.setState({ error: 'Passwords do not match.' });
         }
         try {
-            const res = await Api.signUp(email, password);
-            const { data: { token } } = res;
+            const token = await Api.signUp(email, password);
             await AsyncStorage.setItem('treatsToken', token);
             navigation.navigate('Map');
         } catch (error) {
-            this.setState({error});
+            this.setState({ error: 'Oops something went wrong...' });
         }
     };
 
     render() {
         const { navigation } = this.props;
         const { error } = this.state;
-        const errComp = (<Text>Oops, something went wrong...</Text>);
+        const errComp = (<Text>{ error }</Text>);
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>Register</Text>

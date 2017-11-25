@@ -4,7 +4,6 @@ import {
     View,
     Dimensions,
     AsyncStorage,
-    Button,
     TouchableOpacity,
     Text,
 } from 'react-native';
@@ -12,6 +11,7 @@ import {
     FormLabel,
     FormInput,
 } from 'react-native-elements';
+import axios from 'axios';
 import Api from './../services/ApiService';
 
 export default class Login extends React.Component {
@@ -27,14 +27,13 @@ export default class Login extends React.Component {
         const { email, password } = this.state;
         const { navigation } = this.props;
         try {
-            const res = await Api.signIn(email, password);
-            const { data: { token } } = res;
+            const token = await Api.signIn(email, password);
             await AsyncStorage.setItem('treatsToken', token);
             navigation.navigate('Map');
         } catch (error) {
             this.setState({error});
         }
-    }
+    };
 
     render() {
         const { navigation } = this.props;

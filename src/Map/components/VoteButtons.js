@@ -3,17 +3,17 @@ import {
     StyleSheet,
     View,
     Text,
-    TouchableHighlight
+    TouchableOpacity
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default class VoteButtons extends React.Component {
     render() {
-        const { handleVote, timestamp } = this.props;
+        const { handleVote, houseCreator } = this.props;
         return (
             <View style={styles.voteContainer}>
-                <TouchableHighlight
-                    onPress={() => handleVote(timestamp, true)}
+                <TouchableOpacity
+                    onPress={() => handleVote(houseCreator, 1)}
                     style={styles.vote}>
                     <FontAwesome
                         style={styles.vote}
@@ -21,9 +21,9 @@ export default class VoteButtons extends React.Component {
                         size={28}
                         color="green"
                     />
-                </TouchableHighlight>
-                <TouchableHighlight
-                    onPress={() => handleVote(timestamp, false)}
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => handleVote(houseCreator, -1)}
                     style={styles.vote}>
                     <FontAwesome
                         style={styles.vote}
@@ -31,7 +31,7 @@ export default class VoteButtons extends React.Component {
                         size={28}
                         color="red"
                     />
-                </TouchableHighlight>
+                </TouchableOpacity>
             </View>
         )
     }
