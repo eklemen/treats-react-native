@@ -83,23 +83,25 @@ export default class Map extends React.Component {
     };
 
     _handleVote = async (house, voteCreator, vote) => {
-        const { houses } = this.state;
-        // const house = houses.find(h => h.creator === voteCreator);
-        // const voteFound = house.votes.find(vote => vote.creator === id);
-        // console.log('voteFound=++=++=++=++=++', voteFound);
-        // if(voteFound && voteFound.vote === vote) {
-        //     const v = vote === 1 ? 'up' : 'down';
-        //     this.setState({
-        //         errorMessage: `You have already ${v}voted this house`
-        //     });
-        // } else {
-        //     try {
-        //         await Api.putVote(id, {vote});
-        //         await this._getHouses();
-        //     } catch (err) {
-        //         console.log('handleVote err: ', err);
-        //     }
-        // }
+        const { votes, _id } = house;
+        console.log('VOTE================', vote);
+        const userId = await AsyncStorage.getItem('userId');
+        const userVote = votes.find(v => v.creator === userId);
+        if(userVote && userVote.vote === vote){
+            const v = vote === 1 ? 'up' : 'down';
+            this.setState({
+                errorMessage: `You have already ${v}voted this house`
+            });
+            console.log('state------------', this.state);
+        } else {
+            try {
+                console.log('HERE IS CREATOR  ', _id);
+                await Api.putVote(_id, {vote});
+                await this._getHouses();
+            } catch (err) {
+                console.log('handleVote err: ', err);
+            }
+        }
     };
 
     logout = async () => {

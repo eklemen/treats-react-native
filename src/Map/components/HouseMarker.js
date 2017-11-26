@@ -15,7 +15,6 @@ export default class HouseMarker extends React.Component {
         const {
             position: {lat, long},
             votes,
-            timestamp,
             creator,
         } = house;
 
@@ -38,8 +37,8 @@ export default class HouseMarker extends React.Component {
                         </Text>
                         <VoteButtons
                             handleVote={handleVote}
-                            timestamp={timestamp}
-                            houseCreator={ creator }
+                            house={ house }
+                            voteCreator={ creator }
                         />
                     </View>
                 </MapView.Callout>

@@ -9,11 +9,11 @@ import { FontAwesome } from '@expo/vector-icons';
 
 export default class VoteButtons extends React.Component {
     render() {
-        const { handleVote, houseCreator } = this.props;
+        const { handleVote, voteCreator, house } = this.props;
         return (
             <View style={styles.voteContainer}>
                 <TouchableOpacity
-                    onPress={() => handleVote(houseCreator, 1)}
+                    onPress={() => handleVote(house, voteCreator, 1)}
                     style={styles.vote}>
                     <FontAwesome
                         style={styles.vote}
@@ -23,7 +23,7 @@ export default class VoteButtons extends React.Component {
                     />
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => handleVote(houseCreator, -1)}
+                    onPress={() => handleVote(house, voteCreator, -1)}
                     style={styles.vote}>
                     <FontAwesome
                         style={styles.vote}

@@ -27,8 +27,9 @@ export default class Login extends React.Component {
         const { email, password } = this.state;
         const { navigation } = this.props;
         try {
-            const token = await Api.signIn(email, password);
-            await AsyncStorage.setItem('treatsToken', token);
+            const data = await Api.signIn(email, password);
+            await AsyncStorage.setItem('treatsToken', data.token);
+            await AsyncStorage.setItem('userId', data.user_id);
             navigation.navigate('Map');
         } catch (error) {
             this.setState({error});

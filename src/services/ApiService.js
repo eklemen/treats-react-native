@@ -19,9 +19,9 @@ const Api = {};
 Api.signIn = async (email, password) => {
     try {
         const res = await axios.post('/signin', { email, password });
-        const { data: { token } } = res;
-        axios.defaults.headers.common['Authorization'] = token;
-        return token;
+        const { data } = res;
+        axios.defaults.headers.common['Authorization'] = data.token;
+        return data;
     } catch (err) {
         console.log('ApiServie signIn err: ', err);
     }
@@ -30,9 +30,9 @@ Api.signIn = async (email, password) => {
 Api.signUp = async (email, password) => {
     try {
         const res = await axios.post('/signup', { email, password });
-        const { data: { token } } = res;
-        axios.defaults.headers.common['Authorization'] = token;
-        return token;
+        const { data } = res;
+        axios.defaults.headers.common['Authorization'] = data.token;
+        return data;
     } catch (err) {
         console.log('ApiServie signUp err: ', err);
     }
