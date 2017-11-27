@@ -4,7 +4,11 @@ import {
     View,
     Text,
     AsyncStorage,
+    Image,
+    Dimensions,
 } from 'react-native';
+import { LinearGradient } from 'expo';
+const icon = require('../assets/splash.png');
 
 export default class SplashScreen extends React.Component {
     constructor(props) {
@@ -20,9 +24,14 @@ export default class SplashScreen extends React.Component {
         try {
             const token = await AsyncStorage.getItem('treatsToken');
             if(token) {
-                navigation.navigate('Map');
+                setTimeout(() => {
+                    navigation.navigate('Map');
+                }, 2000);
+
             } else {
-                navigation.navigate('Login');
+                setTimeout(() => {
+                    navigation.navigate('Login');
+                }, 2000);
             }
         } catch (err) {
             console.log('_checkToken err: ', err);
@@ -31,9 +40,13 @@ export default class SplashScreen extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <Text>Loading...</Text>
-            </View>
+            <LinearGradient
+                colors={['#F7971E', '#FFD200']}
+                style={styles.container}>
+                <Image
+                    style={ styles.icon }
+                    source={ icon } />
+            </LinearGradient>
         );
     }
 }
@@ -44,6 +57,12 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 100,
+        height: Dimensions.get('window').height,
+        backgroundColor: 'red',
+    },
+    icon: {
+        height: 250,
+        width: 200,
+        display: 'flex',
     },
 });
