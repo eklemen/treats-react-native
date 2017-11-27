@@ -8,10 +8,24 @@ import {
 import { MapView } from 'expo';
 import { FontAwesome } from '@expo/vector-icons';
 import VoteButtons from './VoteButtons';
+const houseIcon1 = require('../../assets/houseIcon1.png');
+const houseIcon2 = require('../../assets/houseIcon2.png');
 
 export default class HouseMarker extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            selectedCalloutIndex: null
+        };
+    }
+    onCalloutPressed (index) {
+        const calloutRef = `callout-${index}`;
+        // const item = this.refs[calloutRef];
+        this.setState({ selectedCalloutIndex: index });
+    }
+
     render() {
-        const { house, handleVote } = this.props;
+        const { house, handleVote, index } = this.props;
         const {
             position: {lat, long},
             votes,
@@ -22,6 +36,7 @@ export default class HouseMarker extends React.Component {
         const likesStyles = [styles.netLikes];
         if(netLikes < 0) likesStyles.push(styles.negativeLikes);
         if(netLikes === 0) likesStyles.push(styles.neutralLikes);
+        const icon = index % 2 ? houseIcon1 : houseIcon2;
 
         return (
             <MapView.Marker
@@ -29,6 +44,10 @@ export default class HouseMarker extends React.Component {
                     latitude: lat,
                     longitude: long
                 }}
+                image={ icon }
+                onPress={() => this.onCalloutPressed(index)}
+                ref={`callout-${index}`}
+                zIndex={this.state.selectedCalloutIndex === index ? 999 : 0}
             >
                 <MapView.Callout style={styles.container}>
                     <View style={styles.callout}>
@@ -49,12 +68,12 @@ export default class HouseMarker extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        width: 90
+        width: 110
     },
     netLikes: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 8,
+        paddingBottom: 8,
         color: 'darkgreen'
     },
     neutralLikes: {

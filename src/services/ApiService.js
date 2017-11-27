@@ -77,10 +77,10 @@ Api.addHouse = async (house) => {
     }
 };
 
-Api.putVote = async (id, vote) => {
+Api.putVote = async (id, v) => {
     try {
         const auth = await _authReq();
-        await axios.put(`/houses/${id}/vote`, vote, auth);
+        await axios.put(`/houses/${id}/vote`, {"vote": v}, auth);
     } catch (err) {
         console.log('ApiService putVote err: ', err);
     }

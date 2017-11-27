@@ -5,13 +5,14 @@ import {
     Text,
     Dimensions,
     Platform,
-    AsyncStorage
+    TouchableOpacity,
+    AsyncStorage,
+    Alert,
 } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
-import axios from 'axios';
 import HouseMarker from './components/HouseMarker';
+import LogoutButton from './components/LogoutButton';
 import ButtonBar from './../shared/ButtonBar';
-import mockPoints from './fixtures/mockPoints'
 import Api from './../services/ApiService';
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -83,28 +84,33 @@ export default class Map extends React.Component {
     };
 
     _handleVote = async (house, voteCreator, vote) => {
-        const { votes, _id } = house;
-        console.log('VOTE================', vote);
-        const userId = await AsyncStorage.getItem('userId');
-        const userVote = votes.find(v => v.creator === userId);
-        if(userVote && userVote.vote === vote){
-            const v = vote === 1 ? 'up' : 'down';
-            this.setState({
-                errorMessage: `You have already ${v}voted this house`
-            });
-            console.log('state------------', this.state);
-        } else {
-            try {
-                console.log('HERE IS CREATOR  ', _id);
-                await Api.putVote(_id, {vote});
-                await this._getHouses();
-            } catch (err) {
-                console.log('handleVote err: ', err);
-            }
+        const { _id } = house;
+        // const userId = await AsyncStorage.getItem('userId');
+        // const previousVote = votes.find(v => v.creator === userId);
+        // if(previousVote && previousVote.vote === vote){
+        //     const v = vote === 1 ? 'up' : 'down';
+        //     this.setState({
+        //         errorMessage: `You have already ${v}voted this house`
+        //     });
+        //     console.log('state.errorMessage------------', this.state.errorMessage);
+        // } else {
+        //     try {
+        //         await Api.putVote(_id, vote);
+        //         await this._getHouses();
+        //     } catch (err) {
+        //         console.log('handleVote err: ', err);
+        //     }
+        // }
+        // TODO prevent user from re-voting
+        try {
+            await Api.putVote(_id, vote);
+            await this._getHouses();
+        } catch (err) {
+            console.log('handleVote err: ', err);
         }
     };
 
-    logout = async () => {
+    _logout = async () => {
         const { navigation } = this.props;
         try {
             await Api.logout();
@@ -113,6 +119,16 @@ export default class Map extends React.Component {
         } catch (err) {
             console.log('logout err: ', err);
         }
+    };
+    _showAlert = () => {
+        Alert.alert(
+            'Do you want to logout?',
+            null,
+            [
+                {text: 'Cancel', style: 'cancel'},
+                { text: 'Logout', onPress: () => this.logout().done() },
+            ],
+        )
     };
 
     render() {
@@ -128,10 +144,10 @@ export default class Map extends React.Component {
             )
         }
         const { location: {coords}, houses } = this.state;
-        // console.log('one house ++++++++++++++++++', houses[0]);
         const { latitude, longitude } = coords;
         return (
             <View style={styles.container}>
+                <LogoutButton showAlert={ this._showAlert } />
                 <MapView
                     provider={this.props.provider}
                     style={styles.map}
@@ -141,20 +157,22 @@ export default class Map extends React.Component {
                         latitudeDelta: LATITUDE_DELTA,
                         longitudeDelta: LONGITUDE_DELTA,
                     }}
-                    showsUserLocation={true}
-                >
+                    showsUserLocation={true}>
+
                     {
                         houses && houses.map((house, i) => (
                             <HouseMarker
                                 house={house}
                                 key={i}
+                                index={i}
                                 handleVote={this._handleVote}
                             />
                         ))
                     }
                 </MapView>
+
                 <ButtonBar onPress={this.addMarker}
-                           logout={ () => this.logout().done() } />
+                           logout={ () => this._logout().done() } />
             </View>
         );
     }
@@ -163,10 +181,15 @@ export default class Map extends React.Component {
 const styles = StyleSheet.create({
     container: {
         ...StyleSheet.absoluteFillObject,
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
+        backgroundColor: '#a9a9a9',
         alignItems: 'center',
     },
     map: {
-        ...StyleSheet.absoluteFillObject,
+        position: 'absolute',
+        top: 20,
+        bottom: 0,
+        right: 0,
+        left: 0,
     },
 });

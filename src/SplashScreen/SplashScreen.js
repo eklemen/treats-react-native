@@ -19,7 +19,6 @@ export default class SplashScreen extends React.Component {
         const { navigation } = this.props;
         try {
             const token = await AsyncStorage.getItem('treatsToken');
-            console.log('token', token);
             if(token) {
                 navigation.navigate('Map');
             } else {

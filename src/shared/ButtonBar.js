@@ -8,20 +8,14 @@ import {
 
 export default class ButtonBar extends React.Component {
     render() {
-        const { onPress, logout } = this.props;
+        const { onPress } = this.props;
         return (
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={ onPress }
                     style={[styles.bubble, styles.button]}
                 >
-                    <Text>Treat!</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={ logout }
-                    style={[styles.bubble, styles.button]}
-                >
-                    <Text>Logout</Text>
+                    <Text style={ styles.buttonText }>Treat!</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -30,15 +24,20 @@ export default class ButtonBar extends React.Component {
 
 const styles = StyleSheet.create({
     bubble: {
-        backgroundColor: 'rgba(255,255,255,0.7)',
+        backgroundColor: 'rgba(214, 128, 14, 0.8)',
         paddingVertical: 12,
         borderRadius: 20,
     },
     button: {
-        width: 80,
+        width: 180,
         paddingHorizontal: 12,
         alignItems: 'center',
         marginHorizontal: 10,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     buttonContainer: {
         flexDirection: 'row',
