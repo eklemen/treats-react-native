@@ -24,7 +24,7 @@ export default class ButtonBar extends React.Component {
 
 const styles = StyleSheet.create({
     bubble: {
-        backgroundColor: 'rgba(214, 128, 14, 0.8)',
+        backgroundColor: 'rgba(247, 151, 30, 0.85)',
         paddingVertical: 12,
         borderRadius: 20,
     },

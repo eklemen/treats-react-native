@@ -18,6 +18,7 @@ const Routes = StackNavigator({
     Login: {
         screen: Login,
         navigationOptions: {
+            header: false,
             title: 'Login',
             headerLeft: null,
         },

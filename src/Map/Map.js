@@ -126,7 +126,7 @@ export default class Map extends React.Component {
             null,
             [
                 {text: 'Cancel', style: 'cancel'},
-                { text: 'Logout', onPress: () => this.logout().done() },
+                { text: 'Logout', onPress: () => this._logout().done() },
             ],
         )
     };

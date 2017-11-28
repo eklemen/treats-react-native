@@ -4,7 +4,6 @@ import {
     View,
     Dimensions,
     AsyncStorage,
-    Button,
     TouchableOpacity,
     Text,
 } from 'react-native';
@@ -12,7 +11,7 @@ import {
     FormLabel,
     FormInput,
 } from 'react-native-elements';
-import axios from 'axios';
+import { LinearGradient } from 'expo';
 import Api from './../services/ApiService';
 
 export default class Register extends React.Component {
@@ -46,10 +45,16 @@ export default class Register extends React.Component {
         const { error } = this.state;
         const errComp = (<Text>{ error }</Text>);
         return (
-            <View style={styles.container}>
+            <LinearGradient
+                colors={['#F7971E', '#FFD200']}
+                start={[0.7, 0.5]}
+                end={[0.1, 0.1]}
+                style={styles.container}>
                 <Text style={styles.title}>Register</Text>
                 { error && errComp}
-                <FormLabel>Email</FormLabel>
+                <FormLabel labelStyle={styles.label}>
+                    Email
+                </FormLabel>
                 <FormInput
                     inputStyle={ styles.input }
                     containerStyle={ styles.inputContainer }
@@ -58,7 +63,9 @@ export default class Register extends React.Component {
                     autoCapitalize="none"
                     onChangeText={ email => { this.setState({ email }) } }/>
 
-                <FormLabel>Password</FormLabel>
+                <FormLabel labelStyle={styles.label}>
+                    Password
+                </FormLabel>
                 <FormInput
                     inputStyle={ styles.input }
                     containerStyle={ styles.inputContainer }
@@ -66,7 +73,9 @@ export default class Register extends React.Component {
                     autoCapitalize="none"
                     onChangeText={ password => { this.setState({ password }) } }/>
 
-                <FormLabel>Re-Enter Password</FormLabel>
+                <FormLabel labelStyle={styles.label}>
+                    Re-Enter Password
+                </FormLabel>
                 <FormInput
                     inputStyle={ styles.input }
                     containerStyle={ styles.inputContainer }
@@ -81,12 +90,12 @@ export default class Register extends React.Component {
                 <View style={styles.newMember}>
                     <TouchableOpacity onPress={ () => navigation.navigate('Login') }>
                         <View>
-                            <Text>Already have an account? </Text>
+                            <Text style={styles.label}>Already have an account? </Text>
                             <Text style={styles.link}>Login here</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </LinearGradient>
         );
     }
 }
@@ -97,11 +106,16 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 50,
+        height: Dimensions.get('window').height,
     },
     title: {
         fontSize: 32,
+        backgroundColor: 'transparent',
         marginBottom: 30,
+    },
+    label: {
+        backgroundColor: 'transparent',
+        color: '#3a3a3a',
     },
     input: {
         marginLeft: 20,
@@ -129,6 +143,9 @@ const styles = StyleSheet.create({
     },
     link: {
         fontSize: 14,
-        color: 'cornflowerblue'
+        color: '#0050d1',
+        backgroundColor: 'transparent',
+        textAlign: 'center',
+        fontWeight: 'bold',
     },
 });

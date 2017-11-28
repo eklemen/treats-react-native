@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     callout: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     voteContainer: {
         flexDirection: 'row',

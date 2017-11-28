@@ -42,6 +42,8 @@ export default class SplashScreen extends React.Component {
         return (
             <LinearGradient
                 colors={['#F7971E', '#FFD200']}
+                start={[0.3, 0.1]}
+                end={[0.7, 0.5]}
                 style={styles.container}>
                 <Image
                     style={ styles.icon }
@@ -58,7 +60,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: Dimensions.get('window').height,
-        backgroundColor: 'red',
     },
     icon: {
         height: 250,
